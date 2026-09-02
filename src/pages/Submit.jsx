@@ -89,7 +89,7 @@ export default function Submit() {
             />
             <div style={{ marginTop: 16 }}>
               <SpringButton className="btn primary" sound="bloom" onClick={upload} disabled={!file || busy}>
-                {busy ? 'SUBIENDO…' : 'LANZAR AL ESPACIO'}
+                {busy ? 'SUBIENDO…' : 'Postularme'}
               </SpringButton>
             </div>
             {err && <p className="msg error">{err}</p>}

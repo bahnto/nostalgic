@@ -55,7 +55,7 @@ export default function Results() {
             <p className="winner-glow" style={{ fontSize: 22, fontWeight: 700, margin: '6px 0' }}>
               {entry ? entry.participant_name : 'Sin votos'}
             </p>
-            {entry && <p className="msg" style={{ marginTop: 0 }}>{count} {count === 1 ? 'voto' : 'votos'} · Sin premios, solo gloria.</p>}
+            {entry && <p className="msg" style={{ marginTop: 0 }}>{count} {count === 1 ? 'voto' : 'votos'} · Otra coronación de gloria para vos.</p>}
           </div>
         </div>
       ))}

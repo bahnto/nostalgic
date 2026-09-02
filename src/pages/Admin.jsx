@@ -131,7 +131,7 @@ export default function Admin() {
                   </div>
                   <SpringButton className="btn" onClick={() => remove(c.id)}
                     style={{ borderColor: 'rgba(240, 120, 120, 0.55)', color: '#F09595', background: 'rgba(240, 120, 120, 0.08)' }}>
-                    {'/!\\'} BORRAR
+                    ⚠︎ BORRAR
                   </SpringButton>
                 </div>
                 <div style={{ display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' }}>

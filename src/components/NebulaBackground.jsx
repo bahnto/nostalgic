@@ -62,7 +62,7 @@ export default function NebulaBackground() {
       st.textContent = `@keyframes nebdrift { from { background-position: 0 0; } to { background-position: -${W}px 0; } }`
       document.head.appendChild(st)
     }
-    el.style.animation = 'nebdrift 55s linear infinite'
+    el.style.animation = 'nebdrift 35s linear infinite'
 
     // Hotspot estático (composición de la v3)
     const nst = staticRef.current

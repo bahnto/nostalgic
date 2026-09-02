@@ -55,7 +55,7 @@ export default function Vote() {
     <div className="page">
       <p className="kicker">{contest.title.toUpperCase()} · VOTANDO COMO {name.toUpperCase()}</p>
       <h1 className="display">Votación</h1>
-      <p className="lead" style={{ marginTop: 10 }}>Un voto por categoría. Elegí y confirmá — no hay vuelta atrás.</p>
+      <p className="lead" style={{ marginTop: 10 }}>Un voto por categoría. Considera bien tu elección.</p>
 
       {contest.categories.map(cat => {
         const voted = myVotes[cat.id]
