@@ -25,13 +25,13 @@ export default function Landing() {
         <h1
           style={{
             fontSize: 'clamp(38px, 4.8vw, 64px)', fontWeight: 700, lineHeight: 1.05,
-            margin: '0 0 26px', color: 'transparent',
+            margin: '0 0 34px', color: 'transparent',
             WebkitTextStroke: '1.5px rgba(185, 195, 255, 0.45)'
           }}
         >
           de setups
         </h1>
-        <p className="lead" style={{ fontSize: 'clamp(15px, 1.15vw, 18px)', marginBottom: 34, maxWidth: 460 }}>
+        <p className="lead" style={{ fontSize: 'clamp(15px, 1.15vw, 18px)', marginBottom: 50, maxWidth: 460 }}>
           La votación se hará el 19 de Septiembre en lo de Ihar
         </p>
         <SpringButton

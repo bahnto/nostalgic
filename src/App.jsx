@@ -24,7 +24,7 @@ function Shell() {
         </Routes>
       </div>
       {!isAdmin && (
-        <footer className="dedication">★ PARA LOS TEAMS DE JUNO, CORGI Y BULLDOG   ʚ♡ɞ ˚ ✧˖ ° </footer>
+        <footer className="dedication">° ˖✧ ˚ ʚ♡ɞ  PARA LOS TEAMS DE JUNO, CORGI Y BULLDOG   ʚ♡ɞ ˚ ✧˖ ° </footer>
       )}
     </>
   )
