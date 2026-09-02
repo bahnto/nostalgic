@@ -75,7 +75,7 @@ export default function Vote() {
                 >
                   {e.media_type === 'video'
                     ? <video src={e.media_url} muted loop onPointerEnter={ev => ev.target.play()} onPointerLeave={ev => ev.target.pause()} />
-                    : <img src={e.media_url} alt={e.participant_name} onClick={(ev) => { ev.stopPropagation(); setZoom(e) }} />>}
+                    : <img src={e.media_url} alt={e.participant_name} onClick={(ev) => { ev.stopPropagation(); setZoom(e) }} />}
                   <p className="name">{e.participant_name}</p>
                 </div>
               ))}
