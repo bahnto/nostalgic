@@ -75,11 +75,11 @@ export default function Admin() {
       {/* Fondo sólido: acá no hay espacio, hay mantenimiento */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, background: '#140B10' }} />
 
-      <div className="page" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="page admin-zone" style={{ position: 'relative', zIndex: 1 }}>
         <p className="kicker" style={{ color: DANGER, letterSpacing: 5 }}>
           ⚠︎ ZONA RESTRINGIDA ⚠
         </p>
-        <h1 className="display">Admin</h1>
+        <h2 className="display">Admin</h2>
         <div style={hazardStripe} />
 
         {!authed ? (

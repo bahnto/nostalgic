@@ -126,3 +126,6 @@ input:focus { outline: 1px solid var(--tube-edge); }
 @media (prefers-reduced-motion: reduce) {
   .nebula-drift { animation: none !important; }
 }
+
+
+.admin-zone input:focus { outline: 1px solid rgba(217, 138, 138, 0.7); }
