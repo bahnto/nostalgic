@@ -33,22 +33,22 @@ export default function Join() {
 
   return (
     <div className="page" style={{ maxWidth: 560 }}>
-      <p className="kicker">IDENTIFICATE, PILOTO</p>
-      <h1 className="display">¿Quién sos?</h1>
+      <p className="kicker"></p>
+      <h1 className="display">¿Quién  ̶c̶h̶o̶t̶a̶  sos?</h1>
 
       <div className="panel">
         <input
           type="text"
-          placeholder="Tu nombre (el que van a ver todos)"
+          placeholder="Nombre/apodo/pseudonimo/lo que quieras"
           value={local}
           onChange={(e) => setLocal(e.target.value)}
         />
       </div>
 
-      <p className="kicker" style={{ marginTop: 34 }}>CONCURSOS EN ÓRBITA</p>
+      <p className="kicker" style={{ marginTop: 34 }}>CONCURSOS ACTIVOS</p>
       {contests === undefined && <p className="msg">Escaneando el sector…</p>}
       {contests?.length === 0 && (
-        <p className="msg">No hay concursos activos. Volvé cuando la admin abra alguno.</p>
+        <p className="msg">No hay concursos activos por el momento. Volvé cuando la admin se ponga las pilas. Ah re que soy yo.</p>
       )}
       {contests?.map(c => (
         <div className="panel" key={c.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>

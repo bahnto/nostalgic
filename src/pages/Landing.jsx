@@ -2,9 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import Turbine from '../components/Turbine.jsx'
 import SpringButton from '../components/SpringButton.jsx'
 
-// Landing full-bleed: el canvas 3D ocupa toda la pantalla (turbina a la
-// derecha, estrellas por todo el viewport) y el texto flota encima,
-// a escala de pantalla real.
+
 export default function Landing() {
   const nav = useNavigate()
   return (
@@ -19,7 +17,7 @@ export default function Landing() {
         }}
       >
         <p className="kicker" style={{ fontSize: 12, letterSpacing: 6 }}>
-          OFICINA · GAMING · 2026
+          
         </p>
         <h1 style={{ fontSize: 'clamp(38px, 4.8vw, 64px)', fontWeight: 700, lineHeight: 1.05, margin: 0 }}>
           Concurso
@@ -34,7 +32,7 @@ export default function Landing() {
           de setups
         </h1>
         <p className="lead" style={{ fontSize: 'clamp(15px, 1.15vw, 18px)', marginBottom: 34, maxWidth: 460 }}>
-          Mostrá tu estación de batalla. Caos, orden, o eso que solo vos entendés.
+          La votación se hará el 19 de Septiembre en lo de Ihar
         </p>
         <SpringButton
           className="btn primary"
