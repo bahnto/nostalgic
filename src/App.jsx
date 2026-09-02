@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import NebulaBackground from './components/NebulaBackground.jsx'
 import Landing from './pages/Landing.jsx'
 import Join from './pages/Join.jsx'
@@ -7,10 +7,12 @@ import Vote from './pages/Vote.jsx'
 import Results from './pages/Results.jsx'
 import Admin from './pages/Admin.jsx'
 
-export default function App() {
+function Shell() {
+  const { pathname } = useLocation()
+  const isAdmin = pathname.startsWith('/admin')
   return (
-    <BrowserRouter>
-      <NebulaBackground />
+    <>
+      {!isAdmin && <NebulaBackground />}
       <div className="app-layer">
         <Routes>
           <Route path="/" element={<Landing />} />
@@ -21,7 +23,17 @@ export default function App() {
           <Route path="/admin" element={<Admin />} />
         </Routes>
       </div>
-      <footer className="dedication">★ PARA LOS TEAMS DE JUNO, CORGI Y BULLDOG</footer>
+      {!isAdmin && (
+        <footer className="dedication">★ PARA LOS TEAMS DE JUNO, CORGI Y BULLDOG</footer>
+      )}
+    </>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Shell />
     </BrowserRouter>
   )
 }

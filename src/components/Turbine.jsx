@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react'
 
-// La turbina FINAL (v21): tubos de vidrio esmerilado con transmisión real
-// (lo que pasa por detrás se ve borroso a través del cuerpo, via render
-// a textura en dos pasadas), hombros redondeados (LatheGeometry),
-// órbita chata con brillo por distancia, tumbo de precesión, tilt con
-// cursor y spin clickeable con fricción. Three.js carga lazy.
-export default function Turbine({ height = 440 }) {
+// Turbina v22 — FULL BLEED: el canvas ocupa toda la sección, la turbina vive
+// desplazada a la derecha dentro de la escena, las estrellas se reparten por
+// todo el viewport y nada se corta. Vidrio esmerilado con transmisión real
+// (dos pasadas), hombros redondeados, órbita chata con brillo por distancia.
+export default function Turbine() {
   const mountRef = useRef(null)
 
   useEffect(() => {
@@ -15,23 +14,20 @@ export default function Turbine({ height = 440 }) {
     import('three').then((THREE) => {
       if (disposed || !mountRef.current) return
       const mount = mountRef.current
-      const W = mount.clientWidth, H = mount.clientHeight
 
       const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-      renderer.setSize(W, H)
       mount.appendChild(renderer.domElement)
+      renderer.domElement.style.display = 'block'
 
       const dbSize = new THREE.Vector2()
-      renderer.getDrawingBufferSize(dbSize)
-      const bgRT = new THREE.WebGLRenderTarget(
-        Math.round(dbSize.x / 2), Math.round(dbSize.y / 2),
-        { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter }
-      )
+      const bgRT = new THREE.WebGLRenderTarget(2, 2, {
+        minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter
+      })
 
       const scene = new THREE.Scene()
-      const camera = new THREE.PerspectiveCamera(42, W / H, 0.1, 120)
-      camera.position.set(0, 0.4, 26)
+      const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 120)
+      camera.position.set(0, 0.3, 30)
       camera.lookAt(0, 0, 0)
 
       const hash = (x, y) => { const n = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return n - Math.floor(n) }
@@ -39,8 +35,8 @@ export default function Turbine({ height = 440 }) {
       const makeStars = (count, zmin, zmax, size, op) => {
         const pos = new Float32Array(count * 3)
         for (let i = 0; i < count; i++) {
-          pos[i * 3] = (Math.random() - 0.5) * 90
-          pos[i * 3 + 1] = (Math.random() - 0.5) * 55
+          pos[i * 3] = (Math.random() - 0.5) * 110
+          pos[i * 3 + 1] = (Math.random() - 0.5) * 62
           pos[i * 3 + 2] = zmin + Math.random() * (zmax - zmin)
         }
         const g = new THREE.BufferGeometry()
@@ -49,9 +45,9 @@ export default function Turbine({ height = 440 }) {
           color: 0xD8DCF8, size, sizeAttenuation: true, transparent: true, opacity: op, depthWrite: false
         }))
       }
-      scene.add(makeStars(110, -55, -25, 0.22, 0.5))
-      scene.add(makeStars(45, -24, -8, 0.3, 0.7))
-      scene.add(makeStars(14, -6, 6, 0.38, 0.85))
+      scene.add(makeStars(130, -55, -25, 0.22, 0.5))
+      scene.add(makeStars(55, -24, -8, 0.3, 0.7))
+      scene.add(makeStars(16, -6, 6, 0.38, 0.85))
 
       const vsh = `varying vec3 vN; varying vec3 vV; varying vec2 vUv;
         void main(){ vec4 mv = modelViewMatrix * vec4(position,1.0);
@@ -62,34 +58,39 @@ export default function Turbine({ height = 440 }) {
       const BODY = new THREE.Color().setHSL(0.7, 0.7, 0.2)
       const CAPC = new THREE.Color().setHSL(0.7, 0.72, 0.66)
 
-      const bodyMat = () => new THREE.ShaderMaterial({
-        uniforms: {
-          uBase: { value: BODY }, uEdge: { value: EDGE },
-          uBg: { value: bgRT.texture }, uRes: { value: dbSize.clone() }
-        },
-        vertexShader: vsh,
-        fragmentShader: `
-          uniform vec3 uBase; uniform vec3 uEdge; uniform sampler2D uBg; uniform vec2 uRes;
-          varying vec3 vN; varying vec3 vV; varying vec2 vUv;
-          vec3 tap(vec2 uv){ vec4 s = texture2D(uBg, uv); return s.rgb * s.a; }
-          void main(){
-            float d = abs(dot(normalize(vN), normalize(vV)));
-            float f = pow(1.0 - d, 2.0);
-            float rim = smoothstep(0.55, 0.95, 1.0 - d);
-            vec2 suv = gl_FragCoord.xy / uRes;
-            suv += normalize(vN).xy * 0.012;
-            vec2 r1 = vec2(7.0) / uRes;
-            vec2 r2 = vec2(14.0) / uRes;
-            vec3 blur = tap(suv) * 0.2;
-            blur += (tap(suv + vec2(r1.x, 0.0)) + tap(suv - vec2(r1.x, 0.0)) + tap(suv + vec2(0.0, r1.y)) + tap(suv - vec2(0.0, r1.y))) * 0.1;
-            blur += (tap(suv + r1 * 0.7) + tap(suv - r1 * 0.7) + tap(suv + vec2(r1.x, -r1.y) * 0.7) + tap(suv + vec2(-r1.x, r1.y) * 0.7)) * 0.06;
-            blur += (tap(suv + vec2(r2.x, 0.0)) + tap(suv - vec2(r2.x, 0.0)) + tap(suv + vec2(0.0, r2.y)) + tap(suv - vec2(0.0, r2.y))) * 0.04;
-            vec3 col = uBase * (0.75 + f * 0.45) + blur * 0.95 + uEdge * (f * 1.05 + rim * 1.25);
-            float a = 0.93 + f * 0.07;
-            gl_FragColor = vec4(col, a);
-          }`,
-        transparent: true, depthWrite: true, side: THREE.FrontSide
-      })
+      const bodyMats = []
+      const bodyMat = () => {
+        const m = new THREE.ShaderMaterial({
+          uniforms: {
+            uBase: { value: BODY }, uEdge: { value: EDGE },
+            uBg: { value: bgRT.texture }, uRes: { value: new THREE.Vector2(2, 2) }
+          },
+          vertexShader: vsh,
+          fragmentShader: `
+            uniform vec3 uBase; uniform vec3 uEdge; uniform sampler2D uBg; uniform vec2 uRes;
+            varying vec3 vN; varying vec3 vV; varying vec2 vUv;
+            vec3 tap(vec2 uv){ vec4 s = texture2D(uBg, uv); return s.rgb * s.a; }
+            void main(){
+              float d = abs(dot(normalize(vN), normalize(vV)));
+              float f = pow(1.0 - d, 2.0);
+              float rim = smoothstep(0.55, 0.95, 1.0 - d);
+              vec2 suv = gl_FragCoord.xy / uRes;
+              suv += normalize(vN).xy * 0.012;
+              vec2 r1 = vec2(7.0) / uRes;
+              vec2 r2 = vec2(14.0) / uRes;
+              vec3 blur = tap(suv) * 0.2;
+              blur += (tap(suv + vec2(r1.x, 0.0)) + tap(suv - vec2(r1.x, 0.0)) + tap(suv + vec2(0.0, r1.y)) + tap(suv - vec2(0.0, r1.y))) * 0.1;
+              blur += (tap(suv + r1 * 0.7) + tap(suv - r1 * 0.7) + tap(suv + vec2(r1.x, -r1.y) * 0.7) + tap(suv + vec2(-r1.x, r1.y) * 0.7)) * 0.06;
+              blur += (tap(suv + vec2(r2.x, 0.0)) + tap(suv - vec2(r2.x, 0.0)) + tap(suv + vec2(0.0, r2.y)) + tap(suv - vec2(0.0, r2.y))) * 0.04;
+              vec3 col = uBase * (0.75 + f * 0.45) + blur * 0.95 + uEdge * (f * 1.05 + rim * 1.25);
+              float a = 0.93 + f * 0.07;
+              gl_FragColor = vec4(col, a);
+            }`,
+          transparent: true, depthWrite: true, side: THREE.FrontSide
+        })
+        bodyMats.push(m)
+        return m
+      }
       const haloMat = () => new THREE.ShaderMaterial({
         uniforms: { uEdge: { value: EDGE } },
         vertexShader: vsh,
@@ -109,7 +110,6 @@ export default function Turbine({ height = 440 }) {
         transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide
       })
 
-      // Tubo de una pieza con hombros redondeados
       const roundedTubeGeo = (rad, len, cr, segs) => {
         const h = len / 2
         const pts = []
@@ -129,6 +129,7 @@ export default function Turbine({ height = 440 }) {
       }
 
       const turbine = new THREE.Group()
+      turbine.position.set(0, 0.4, 0)
       turbine.scale.setScalar(0.8)
       scene.add(turbine)
 
@@ -168,8 +169,8 @@ export default function Turbine({ height = 440 }) {
         turbine.add(arm)
       }
 
-      // Órbita chata con brillo por distancia (cerca = brillante)
       const orbitGroup = new THREE.Group()
+      orbitGroup.position.set(0, 0.4, 0)
       orbitGroup.rotation.x = 1.38
       scene.add(orbitGroup)
       const orbitMat = new THREE.ShaderMaterial({
@@ -194,20 +195,54 @@ export default function Turbine({ height = 440 }) {
       )
       orbitGroup.add(sat)
 
+      // Layout responsive: turbina a la derecha en pantallas anchas,
+      // centrada arriba en pantallas angostas. Nada se corta.
+      let W = 1, H = 1
+      const applySize = () => {
+        W = mount.clientWidth; H = mount.clientHeight
+        if (W < 2 || H < 2) return
+        renderer.setSize(W, H)
+        camera.aspect = W / H
+        camera.updateProjectionMatrix()
+        renderer.getDrawingBufferSize(dbSize)
+        bgRT.setSize(Math.max(2, Math.round(dbSize.x / 2)), Math.max(2, Math.round(dbSize.y / 2)))
+        bodyMats.forEach(m => m.uniforms.uRes.value.copy(dbSize))
+        const halfW = Math.tan(21 * Math.PI / 180) * 30 * camera.aspect
+        const tx = camera.aspect > 1.05 ? Math.min(7.2, halfW * 0.42) : 0
+        const ty = camera.aspect > 1.05 ? 0.4 : 3.2
+        turbine.position.set(tx, ty, 0)
+        orbitGroup.position.set(tx, ty, 0)
+      }
+      applySize()
+      window.addEventListener('resize', applySize)
+
       const tiltX = { x: 0, v: 0, target: 0 }, tiltY = { x: 0, v: 0, target: 0 }
       let spinV = 0, baseZ = 0
 
+      const turbineScreenDist = (e) => {
+        const r = mount.getBoundingClientRect()
+        const vec = turbine.position.clone().project(camera)
+        const sx = (vec.x * 0.5 + 0.5) * r.width
+        const sy = (-vec.y * 0.5 + 0.5) * r.height
+        const dx = (e.clientX - r.left) - sx, dy = (e.clientY - r.top) - sy
+        return Math.sqrt(dx * dx + dy * dy)
+      }
       const onMove = (e) => {
         const r = mount.getBoundingClientRect()
         tiltY.target = ((e.clientX - r.left) / r.width - 0.5) * 0.22
         tiltX.target = ((e.clientY - r.top) / r.height - 0.5) * 0.18
+        mount.style.cursor = turbineScreenDist(e) < Math.min(r.width, r.height) * 0.32 ? 'pointer' : 'default'
       }
       const onLeave = () => { tiltX.target = 0; tiltY.target = 0 }
-      const onDown = () => { spinV = Math.min(spinV + 1.6, 6) }
+      const onDown = (e) => {
+        const r = mount.getBoundingClientRect()
+        if (turbineScreenDist(e) < Math.min(r.width, r.height) * 0.32) {
+          spinV = Math.min(spinV + 1.6, 6)
+        }
+      }
       mount.addEventListener('pointermove', onMove)
       mount.addEventListener('pointerleave', onLeave)
       mount.addEventListener('pointerdown', onDown)
-      mount.style.cursor = 'pointer'
 
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       let raf = 0
@@ -231,12 +266,10 @@ export default function Turbine({ height = 440 }) {
           sat.position.set(Math.cos(sa) * 10.2, Math.sin(sa) * 10.2, 0)
         }
 
-        // Pasada 1: el mundo sin tubos, a textura (para el blur del vidrio)
         turbine.visible = false
         renderer.setRenderTarget(bgRT)
         renderer.render(scene, camera)
         renderer.setRenderTarget(null)
-        // Pasada 2: escena completa
         turbine.visible = true
         renderer.render(scene, camera)
 
@@ -246,6 +279,7 @@ export default function Turbine({ height = 440 }) {
 
       cleanup = () => {
         cancelAnimationFrame(raf)
+        window.removeEventListener('resize', applySize)
         mount.removeEventListener('pointermove', onMove)
         mount.removeEventListener('pointerleave', onLeave)
         mount.removeEventListener('pointerdown', onDown)
@@ -258,5 +292,11 @@ export default function Turbine({ height = 440 }) {
     return () => { disposed = true; cleanup() }
   }, [])
 
-  return <div ref={mountRef} style={{ width: '100%', height, touchAction: 'none' }} aria-hidden="true" />
+  return (
+    <div
+      ref={mountRef}
+      style={{ position: 'absolute', inset: 0, touchAction: 'none', overflow: 'hidden' }}
+      aria-hidden="true"
+    />
+  )
 }
