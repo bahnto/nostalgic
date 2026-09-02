@@ -77,7 +77,7 @@ export default function Admin() {
 
       <div className="page" style={{ position: 'relative', zIndex: 1 }}>
         <p className="kicker" style={{ color: DANGER, letterSpacing: 5 }}>
-          {'/!\\ '}ZONA RESTRINGIDA{' /!\\'}
+          {⚠︎ ZONA RESTRINGIDA ⚠︎}
         </p>
         <h1 className="display">Admin</h1>
         <div style={hazardStripe} />
