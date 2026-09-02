@@ -1,9 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-// Turbina v22 — FULL BLEED: el canvas ocupa toda la sección, la turbina vive
-// desplazada a la derecha dentro de la escena, las estrellas se reparten por
-// todo el viewport y nada se corta. Vidrio esmerilado con transmisión real
-// (dos pasadas), hombros redondeados, órbita chata con brillo por distancia.
+
 export default function Turbine() {
   const mountRef = useRef(null)
 
