@@ -13,6 +13,7 @@ export default function Vote() {
   const [picks, setPicks] = useState({})
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')
+  const [zoom, setZoom] = useState(null)
 
   useEffect(() => {
     if (!name) { nav('/join'); return }
@@ -74,7 +75,7 @@ export default function Vote() {
                 >
                   {e.media_type === 'video'
                     ? <video src={e.media_url} muted loop onPointerEnter={ev => ev.target.play()} onPointerLeave={ev => ev.target.pause()} />
-                    : <img src={e.media_url} alt={e.participant_name} />}
+                    : <img src={e.media_url} alt={e.participant_name} onClick={(ev) => { ev.stopPropagation(); setZoom(e) }} />>}
                   <p className="name">{e.participant_name}</p>
                 </div>
               ))}
@@ -91,6 +92,14 @@ export default function Vote() {
       })}
       {err && <p className="msg error">{err}</p>}
       <p className="msg"><Link to="/join" style={{ color: 'var(--ink-dim)' }}>← Ver otros concursos</Link></p>
+      {zoom && (
+  <div onClick={() => setZoom(null)}
+    style={{ position: 'fixed', inset: 0, zIndex: 99, display: 'grid', placeItems: 'center', background: 'rgba(5,3,12,0.88)', cursor: 'zoom-out' }}>
+    {zoom.media_type === 'video'
+      ? <video src={zoom.media_url} controls autoPlay style={{ maxWidth: '92vw', maxHeight: '86vh', borderRadius: 10 }} />
+      : <img src={zoom.media_url} alt="" style={{ maxWidth: '92vw', maxHeight: '86vh', borderRadius: 10 }} />}
+  </div>
+)}
     </div>
   )
 }
