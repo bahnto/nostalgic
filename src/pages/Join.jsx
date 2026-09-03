@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase, getActiveContests, getName, setName } from '../lib/supabase.js'
 import SpringButton from '../components/SpringButton.jsx'
+import { play } from '../lib/sounds.js'
 
 const phaseRoute = { submissions: 'submit', voting: 'vote', results: 'results' }
 const phaseLabel = { submissions: 'RECIBIENDO ENTRADAS', voting: 'VOTACIÓN ABIERTA', results: 'RESULTADOS' }
@@ -28,6 +29,7 @@ export default function Join() {
   const enter = (contest) => {
     if (!local.trim()) return
     setName(local)
+     play('ps2-intro', 0.5)
     nav(`/c/${contest.id}/${phaseRoute[contest.phase]}`)
   }
 

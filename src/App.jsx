@@ -6,10 +6,12 @@ import Submit from './pages/Submit.jsx'
 import Vote from './pages/Vote.jsx'
 import Results from './pages/Results.jsx'
 import Admin from './pages/Admin.jsx'
+import MusicOrbs, { MuteButton } from './components/MusicOrbs.jsx'
 
 function Shell() {
   const { pathname } = useLocation()
   const isAdmin = pathname.startsWith('/admin')
+  const inContest = pathname.startsWith('/c/')
   return (
     <>
       {!isAdmin && <NebulaBackground />}
