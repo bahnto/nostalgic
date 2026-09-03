@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import Turbine from '../components/Turbine.jsx'
 import SpringButton from '../components/SpringButton.jsx'
+import { play } from '../lib/sounds.js'
 
 
 export default function Landing() {
@@ -37,7 +38,7 @@ export default function Landing() {
         <SpringButton
           className="btn primary"
           sound="bloom"
-          onClick={() => nav('/join')}
+         onClick={() => { play('ps2-intro', 0.5); nav('/join') }}
           style={{ pointerEvents: 'auto', fontSize: 14, padding: '15px 30px', letterSpacing: 2 }}
         >
           SUBIR MI ENTRADA

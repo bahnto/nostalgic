@@ -29,12 +29,11 @@ export default function Join() {
   const enter = (contest) => {
     if (!local.trim()) return
     setName(local)
-     play('ps2-intro', 0.5)
     nav(`/c/${contest.id}/${phaseRoute[contest.phase]}`)
   }
 
   return (
-    <div className="page" style={{ maxWidth: 560 }}>
+    <div className="page" style={{ maxWidth: 560, animation: 'pageFade 1.8s ease-out' }}>
       <p className="kicker"></p>
       <h1 className="display">¿Quién  ̶c̶h̶o̶t̶a̶   sos?</h1>
 
