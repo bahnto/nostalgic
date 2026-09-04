@@ -27,7 +27,9 @@ function Shell() {
       </div>
       {!isAdmin && (
         <footer className="dedication">° ˖✧ ˚ ʚ♡ɞ  PARA LOS TEAMS DE JUNO, CORGI Y BULLDOG   ʚ♡ɞ ˚ ✧˖ ° </footer>
-      )}
+      )} 
+      {inContest && <MusicOrbs />}
+<MuteButton />
     </>
   )
 }

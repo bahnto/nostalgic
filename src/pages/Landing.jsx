@@ -33,12 +33,16 @@ export default function Landing() {
           de setups
         </h1>
         <p className="lead" style={{ fontSize: 'clamp(15px, 1.15vw, 18px)', marginBottom: 50, maxWidth: 460 }}>
-          La votación se hará el 19 de Septiembre en lo de Ihar
+          La votación se hará el 1̶9̶   26 de Septiembre en 𝓛𝓸 𝓭𝓮 𝓘𝓱𝓪𝓻
         </p>
         <SpringButton
           className="btn primary"
-          sound="bloom"
-         onClick={() => { play('ps2-intro', 0.5); nav('/join') }}
+        
+        onClick={(e) => {
+         e.currentTarget.disabled = true
+         play('ps2-intro', 0.5)
+         setTimeout(() => nav('/join'), 1000)
+        }}
           style={{ pointerEvents: 'auto', fontSize: 14, padding: '15px 30px', letterSpacing: 2 }}
         >
           SUBIR MI ENTRADA

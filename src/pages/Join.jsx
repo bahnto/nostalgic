@@ -35,7 +35,7 @@ export default function Join() {
   return (
     <div className="page" style={{ maxWidth: 560, animation: 'pageFade 3s ease-in' }}>
       <p className="kicker"></p>
-      <h1 className="display">¿Quién  ̶c̶h̶o̶t̶a̶   sos?</h1>
+      <h1 className="display">¿Quién sos?</h1>
 
       <div className="panel">
         <input

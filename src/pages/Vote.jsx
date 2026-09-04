@@ -82,7 +82,7 @@ export default function Vote() {
             </div>
             {!voted && (
               <div style={{ marginTop: 16 }}>
-                <SpringButton className="btn primary" sound="bloom" disabled={!picks[cat.id] || busy} onClick={() => submitVote(cat.id)}>
+                <SpringButton className="btn primary" sound="kh-vote" disabled={!picks[cat.id] || busy} onClick={() => submitVote(cat.id)}>
                   CONFIRMAR VOTO
                 </SpringButton>
               </div>

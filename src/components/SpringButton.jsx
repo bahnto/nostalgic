@@ -1,9 +1,8 @@
 import { useRef, useEffect } from 'react'
-import { ensureAudio, thock, bloom } from '../lib/sounds.js'
+import { play } from '../lib/sounds.js'
 
-// Botón con física de resorte real (el mismo spring de toda la sesión de diseño)
-// sound="thock" (default, táctil seco) | "bloom" (espacial, solo para acciones glow)
-export default function SpringButton({ children, onClick, className = 'btn', sound = 'thock', ...rest }) {
+
+export default function SpringButton({ children, onClick, className = 'btn', sound = 'kh-select', ...rest }) {
   const ref = useRef(null)
   const spring = useRef({ x: 1, v: 0, target: 1, raf: 0 })
 
@@ -31,7 +30,7 @@ export default function SpringButton({ children, onClick, className = 'btn', sou
       onPointerLeave={() => { spring.current.target = 1 }}
       onClick={(e) => {
         ensureAudio()
-        sound === 'bloom' ? bloom() : thock()
+        play(sound)
         onClick?.(e)
       }}
       {...rest}
