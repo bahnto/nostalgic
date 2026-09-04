@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import Turbine from '../components/Turbine.jsx'
 import SpringButton from '../components/SpringButton.jsx'
 import { play } from '../lib/sounds.js'
@@ -6,6 +7,7 @@ import { play } from '../lib/sounds.js'
 
 export default function Landing() {
   const nav = useNavigate()
+  const [launching, setLaunching] = useState(false)
   return (
     <div style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
       <Turbine />
@@ -33,20 +35,21 @@ export default function Landing() {
           de setups
         </h1>
         <p className="lead" style={{ fontSize: 'clamp(15px, 1.15vw, 18px)', marginBottom: 50, maxWidth: 460 }}>
-          La votación se hará el 1̶9̶   26 de Septiembre en 𝓛𝓸 𝓭𝓮 𝓘𝓱𝓪𝓻
+          La votación se hará el  ̶1̶9̶    ̷1̷9̷  26 de Septiembre en 𝓛𝓸 𝓭𝓮 𝓘𝓱𝓪𝓻
         </p>
-        <SpringButton
-          className="btn primary"
-        
-        onClick={(e) => {
-         e.currentTarget.disabled = true
-         play('ps2-intro', 0.5)
-         setTimeout(() => nav('/join'), 1000)
-        }}
-          style={{ pointerEvents: 'auto', fontSize: 14, padding: '15px 30px', letterSpacing: 2 }}
-        >
-          SUBIR MI ENTRADA
-        </SpringButton>
+       <SpringButton
+  className="btn primary"
+  disabled={launching}
+  onClick={() => {
+    if (launching) return
+    setLaunching(true)
+    play('ps2-intro', 0.5)
+    setTimeout(() => nav('/join'), 1000)
+  }}
+  style={{ pointerEvents: 'auto', fontSize: 14, padding: '15px 30px', letterSpacing: 2 }}
+>
+  SUBIR MI ENTRADA
+</SpringButton>
       </div>
     </div>
   )
