@@ -139,7 +139,7 @@ input:focus { outline: 1px solid var(--tube-edge); }
 
 
 /* ——— Reproductor PS2 ——— */
-.music-orbs { position: fixed; top: 16px; right: 18px; z-index: 60; }
+.music-orbs { position: fixed; top: 28px; right: 40px; z-index: 60; }
 
 .orb-cluster {
   width: 48px; height: 48px; cursor: pointer;
@@ -180,7 +180,7 @@ input:focus { outline: 1px solid var(--tube-edge); }
 
 
 .mute-float {
-  position: fixed; bottom: 16px; right: 18px; z-index: 60;
+  position: fixed; bottom: 28px; right: 40px; z-index: 60;
   width: 40px; height: 40px; border-radius: 50%;
   display: grid; place-items: center;
   background: rgba(130, 135, 255, 0.1);

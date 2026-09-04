@@ -1,11 +1,12 @@
 import { useRef, useState } from 'react'
+import { registerAudio, setMuted, isMuted } from '../lib/sounds.js'
 
-// Tus temas de fondo: nombres de archivo sin .mp3, viven en public/sounds/
+
 const PLAYLIST = ['bg-sound']
 const VOLUME = 0.25
 
 // ——— Reproductor: bolitas PS2 que despiertan como botones ———
-export default function MusicOrbs() {
+export default function MusicOrbs({ hidden }) {
   const audioRef = useRef(null)
   const trackRef = useRef(0)
   const [open, setOpen] = useState(false)
@@ -16,6 +17,7 @@ export default function MusicOrbs() {
       const a = new Audio(`/sounds/${PLAYLIST[0]}.mp3`)
       a.volume = VOLUME
       a.addEventListener('ended', () => skip(1))
+      registerAudio(a)
       audioRef.current = a
     }
     return audioRef.current
@@ -28,7 +30,7 @@ export default function MusicOrbs() {
     a.src = `/sounds/${PLAYLIST[trackRef.current]}.mp3`
     playNow()
   }
-
+if (hidden) return null
   if (!open) {
     return (
       <div className="music-orbs orb-cluster" onClick={() => { setOpen(true); playNow() }} title="Música">
@@ -65,13 +67,13 @@ export default function MusicOrbs() {
 }
 
 // ——— Mute global: independiente, vive en toda la app ———
-let globalMuted = false
+
 export function MuteButton() {
-  const [muted, setMuted] = useState(false)
+  const [muted, setLocalMuted] = useState(isMuted())
   const toggle = () => {
-    globalMuted = !globalMuted
-    setMuted(globalMuted)
-    document.querySelectorAll('audio').forEach(a => { a.muted = globalMuted })
+    const m = !isMuted()
+    setMuted(m)
+    setLocalMuted(m)
   }
   return (
     <button
