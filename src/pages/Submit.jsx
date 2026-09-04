@@ -47,6 +47,18 @@ export default function Submit() {
     } finally { setBusy(false) }
   }
 
+
+const replaceMine = async () => {
+  if (!confirm('¿Borrar tu entrada actual para subir otra?')) return
+  const path = mine.media_url.split('/entries/')[1]
+  if (path) await supabase.storage.from('entries').remove([decodeURIComponent(path)])
+  await supabase.from('entries').delete().eq('id', mine.id)
+  setMine(null)
+  setFile(null)
+}
+
+
+
   if (!contest) return <div className="page"><p className="msg">Cargando…</p></div>
   if (contest.phase !== 'submissions') return (
     <div className="page" style={{ maxWidth: 460 }}>
@@ -78,6 +90,14 @@ export default function Submit() {
                 : <img src={mine.media_url} alt="Tu entrada" />}
               <p className="name">{name}</p>
             </div>
+
+            
+<div style={{ marginTop: 14 }}>
+  <SpringButton onClick={replaceMine}>CAMBIAR MI ENTRADA</SpringButton>
+</div>
+
+
+
           </>
         ) : (
           <>
@@ -87,8 +107,16 @@ export default function Submit() {
               onChange={(e) => setFile(e.target.files[0])}
               style={{ color: 'var(--ink-dim)', fontSize: 13 }}
             />
+            {file && (
+  <div className="entry-card" style={{ maxWidth: 320, marginTop: 14, cursor: 'default' }}>
+    {file.type.startsWith('video')
+      ? <video src={URL.createObjectURL(file)} controls />
+      : <img src={URL.createObjectURL(file)} alt="" />}
+    <p className="name">Esto es lo que se va a subir</p>
+  </div>
+)}
             <div style={{ marginTop: 16 }}>
-              <SpringButton className="btn primary" sound="bloom" onClick={upload} disabled={!file || busy}>
+              <SpringButton className="btn primary" onClick={upload} disabled={!file || busy}>
                 {busy ? 'SUBIENDO…' : 'Postularme'}
               </SpringButton>
             </div>

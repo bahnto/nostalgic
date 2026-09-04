@@ -4,8 +4,7 @@ import SpringButton from '../components/SpringButton.jsx'
 
 const PHASES = ['draft', 'submissions', 'voting', 'results']
 
-// Tema "sala de máquinas": sin nebulosa, fondo sólido con subtono rojizo,
-// señalética de peligro en ASCII. Acá no se juega.
+
 const DANGER = '#D98A8A'
 const DANGER_DIM = 'rgba(217, 110, 110, 0.4)'
 const DANGER_FAINT = 'rgba(217, 110, 110, 0.14)'
@@ -138,7 +137,7 @@ export default function Admin() {
                   {PHASES.map(p => (
                     <SpringButton key={p}
                       className="btn"
-                      sound={p === 'results' ? 'bloom' : 'thock'}
+            
                       onClick={() => setPhase(c.id, p)}
                       style={c.phase === p
                         ? { borderColor: DANGER, background: DANGER_FAINT, color: '#F0D3D3', boxShadow: `0 0 14px ${DANGER_FAINT}` }

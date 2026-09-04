@@ -74,7 +74,7 @@ export default function Vote() {
                   onClick={() => { if (!voted) setPicks({ ...picks, [cat.id]: e.id }) }}
                 >
                   {e.media_type === 'video'
-                    ? <video src={e.media_url} muted loop onPointerEnter={ev => ev.target.play()} onPointerLeave={ev => ev.target.pause()} />
+                    ?<video src={e.media_url} muted loop onClick={(ev) => { ev.stopPropagation(); setZoom(e) }} onPointerEnter={ev => ev.target.play()} onPointerLeave={ev => ev.target.pause()} />
                     : <img src={e.media_url} alt={e.participant_name} onClick={(ev) => { ev.stopPropagation(); setZoom(e) }} />}
                   <p className="name">{e.participant_name}</p>
                 </div>
