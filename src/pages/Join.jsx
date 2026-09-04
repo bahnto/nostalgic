@@ -6,7 +6,6 @@ import { play } from '../lib/sounds.js'
 
 const phaseRoute = { submissions: 'submit', voting: 'vote', results: 'results' }
 const phaseLabel = { submissions: 'RECIBIENDO ENTRADAS', voting: 'VOTACIÓN ABIERTA', results: 'RESULTADOS' }
-const [noNameTries, setNoNameTries] = useState(0)
 
 export default function Join() {
   const nav = useNavigate()
@@ -70,18 +69,9 @@ const flashMeme = () => {
             </p>
             <span className="phase-pill" style={{ marginTop: 8, display: 'inline-block' }}>{phaseLabel[c.phase]}</span>
           </div>
-          <div
-  onPointerDown={() => {
-    if (local.trim()) return
-    const n = noNameTries + 1
-    setNoNameTries(n)
-    if (n >= 3) { flashMeme(); setNoNameTries(0) }
-  }}
->
-  <SpringButton className="btn primary" disabled={!local.trim()} onClick={() => enter(c)}>
-    ENTRAR
-  </SpringButton>
-</div>
+          <SpringButton className="btn primary" disabled={!local.trim()} onClick={() => enter(c)}>
+            ENTRAR
+          </SpringButton>
         </div>
       ))}
       {contests?.length > 0 && !local.trim() && (
