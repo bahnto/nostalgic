@@ -14,6 +14,7 @@ export default function Join() {
   const [contests, setContests] = useState(undefined)
   const [mine, setMine] = useState({}) // contest_id -> true si ya tiene entrada
   const [meme, setMeme] = useState(false)
+  const [noNameTries, setNoNameTries] = useState(0)
 const flashMeme = () => {
   if (meme) return
   play('qcs-sfx')
@@ -69,9 +70,18 @@ const flashMeme = () => {
             </p>
             <span className="phase-pill" style={{ marginTop: 8, display: 'inline-block' }}>{phaseLabel[c.phase]}</span>
           </div>
-          <SpringButton className="btn primary" disabled={!local.trim()} onClick={() => enter(c)}>
-            ENTRAR
-          </SpringButton>
+          <div
+  onPointerDown={() => {
+    if (local.trim()) return
+    const n = noNameTries + 1
+    setNoNameTries(n)
+    if (n >= 3) { flashMeme(); setNoNameTries(0) }
+  }}
+>
+  <SpringButton className="btn primary" disabled={!local.trim()} onClick={() => enter(c)}>
+    ENTRAR
+  </SpringButton>
+</div>
         </div>
       ))}
       {contests?.length > 0 && !local.trim() && (
