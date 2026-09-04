@@ -13,6 +13,13 @@ export default function Join() {
   const [local, setLocal] = useState(name)
   const [contests, setContests] = useState(undefined)
   const [mine, setMine] = useState({}) // contest_id -> true si ya tiene entrada
+  const [meme, setMeme] = useState(false)
+const flashMeme = () => {
+  if (meme) return
+  play('qcs-sfx')
+  setMeme(true)
+  setTimeout(() => setMeme(false), 1000)
+}
 
   useEffect(() => {
     getActiveContests().then(async (cs) => {
@@ -35,7 +42,7 @@ export default function Join() {
   return (
     <div className="page" style={{ maxWidth: 560, animation: 'pageFade 3s ease-in' }}>
       <p className="kicker"></p>
-      <h1 className="display">¿Quién sos?</h1>
+      <h1 className="display" onClick={flashMeme} style={{ cursor: 'pointer', userSelect: 'none' }}>¿Quién sos?</h1>
 
       <div className="panel">
         <input
@@ -70,6 +77,22 @@ export default function Join() {
       {contests?.length > 0 && !local.trim() && (
         <p className="msg">Poné tu nombre arriba para poder entrar a un concurso.</p>
       )}
+
+    {meme && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 99,
+          display: 'grid', placeItems: 'center',
+          background: 'rgba(0, 0, 0, 0.75)'
+        }}>
+          <img
+            src="/img/quien_chota_sos.jpg"
+            alt=""
+            style={{ maxWidth: '80vw', maxHeight: '70vh', borderRadius: 12 }}
+          />
+        </div>
+      )}
     </div>
   )
-}
+}      
+
+
