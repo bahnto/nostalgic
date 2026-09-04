@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-
+import { play } from '../lib/sounds.js'
 
 export default function Turbine() {
   const mountRef = useRef(null)
@@ -215,6 +215,18 @@ export default function Turbine() {
 
       const tiltX = { x: 0, v: 0, target: 0 }, tiltY = { x: 0, v: 0, target: 0 }
       let spinV = 0, baseZ = 0
+      let satAngle = Math.random() * Math.PI * 2, satVel = 0.4, satHold = 0
+      let satClicks = 0, satDead = false, satVy = 0, satSpin = 0
+
+      const satScreenDist = (e) => {
+  const r = mount.getBoundingClientRect()
+  const wp = new THREE.Vector3()
+  sat.getWorldPosition(wp)
+  wp.project(camera)
+  const sx = (wp.x * 0.5 + 0.5) * r.width
+  const sy = (-wp.y * 0.5 + 0.5) * r.height
+  return Math.hypot((e.clientX - r.left) - sx, (e.clientY - r.top) - sy)
+}
 
       const turbineScreenDist = (e) => {
         const r = mount.getBoundingClientRect()
@@ -232,11 +244,35 @@ export default function Turbine() {
       }
       const onLeave = () => { tiltX.target = 0; tiltY.target = 0 }
       const onDown = (e) => {
-        const r = mount.getBoundingClientRect()
-        if (turbineScreenDist(e) < Math.min(r.width, r.height) * 0.32) {
-          spinV = Math.min(spinV + 1.6, 6)
-        }
-      }
+  const r = mount.getBoundingClientRect()
+  if (!satDead && satScreenDist(e) < 34) {
+    satClicks++
+    if (satClicks >= 10) {
+      satDead = true
+      const wp = new THREE.Vector3()
+      sat.getWorldPosition(wp)
+      orbitGroup.remove(sat)
+      scene.add(sat)
+      sat.position.copy(wp)
+      satVy = 9
+      play('ball-fall')
+    } else {
+      satHold = 2.5
+      play('kh-select', 0.5)
+    }
+    return
+  }
+  if (turbineScreenDist(e) < Math.min(r.width, r.height) * 0.32) {
+    spinV = Math.min(spinV + 1.6, 6)
+  }
+}
+
+
+
+
+
+
+
       mount.addEventListener('pointermove', onMove)
       mount.addEventListener('pointerleave', onLeave)
       mount.addEventListener('pointerdown', onDown)
@@ -259,8 +295,21 @@ export default function Turbine() {
           turbine.rotation.y = t * 0.06 + Math.sin(t * 0.05) * 0.32 + tiltY.x
           turbine.rotation.x = Math.sin(t * 0.08) * 0.6 + Math.sin(t * 0.03 + 1.7) * 0.22 + tiltX.x
           orbit.rotation.z = t * 0.09
-          const sa = t * 0.4
-          sat.position.set(Math.cos(sa) * 10.2, Math.sin(sa) * 10.2, 0)
+          if (satDead) {
+  if (sat.parent) {
+    satVy -= 22 * dt
+    sat.position.y += satVy * dt
+    satSpin += 9 * dt
+    sat.rotation.z = satSpin
+    if (sat.position.y < -25) scene.remove(sat)
+  }
+} else {
+  satHold = Math.max(0, satHold - dt)
+  const targetVel = satHold > 0 ? 0 : 0.4
+  satVel += (targetVel - satVel) * Math.min(1, dt * 5)
+  satAngle += satVel * dt
+  sat.position.set(Math.cos(satAngle) * 10.2, Math.sin(satAngle) * 10.2, 0)
+}
         }
 
         turbine.visible = false
