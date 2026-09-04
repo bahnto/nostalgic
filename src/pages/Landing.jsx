@@ -35,7 +35,8 @@ export default function Landing() {
           de setups
         </h1>
         <p className="lead" style={{ fontSize: 'clamp(15px, 1.15vw, 18px)', marginBottom: 50, maxWidth: 460 }}>
-          La votación se hará el  ̶1̶9̶    ̷1̷9̷  26 de Septiembre en 𝓛𝓸 𝓭𝓮 𝓘𝓱𝓪𝓻
+          La votación se hará el  ̷1̷9̷  26 de Septiembre en...
+          𝓛𝓸 𝓭𝓮 𝓘𝓱𝓪𝓻
         </p>
        <SpringButton
   className="btn primary"
@@ -51,6 +52,6 @@ export default function Landing() {
   SUBIR MI ENTRADA
 </SpringButton>
       </div>
-    </div>
+    </div> 
   )
 }

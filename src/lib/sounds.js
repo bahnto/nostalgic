@@ -9,3 +9,6 @@ export function play(name, volume = 0.8) {
   a.volume = volume
   a.play().catch(() => {})
 }
+
+
+

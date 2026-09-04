@@ -29,7 +29,6 @@ export default function SpringButton({ children, onClick, className = 'btn', sou
       onPointerUp={() => { spring.current.target = 1 }}
       onPointerLeave={() => { spring.current.target = 1 }}
       onClick={(e) => {
-        ensureAudio()
         play(sound)
         onClick?.(e)
       }}
